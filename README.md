@@ -23,6 +23,6 @@ DevOps pipeline templates for generating SBOMs and scanning vulnerabilities usin
 4. **Convert Vulnerability Report to JUnit XML**:
    - Use the provided Python script to convert the vulnerability report into JUnit XML format:
      ```bash
-     python pipelines/scripts/convert_trivy_to_junit.py vulnerability-report.json vulnerability-report-tests.xml
+     python convert_trivy_to_junit.py vulnerability-report.json vulnerability-report-tests.xml
      ```
    - This will create file `vulnerability-report-tests.xml` with vulnerabilities converted into test cases for DevOps Tests tab.
