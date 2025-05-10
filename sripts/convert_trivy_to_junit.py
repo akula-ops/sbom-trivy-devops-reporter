@@ -25,10 +25,6 @@ def convert_trivy_to_junit(input_file_json: str, output_file_xml: str) -> None:
         # Load the Trivy JSON report
         with open(input_file_json, 'r') as json_vuln_file:
             report = json.load(json_vuln_file)
-        # Validate input file content
-        if not isinstance(report, dict) or "Results" not in report:
-            logger.error("Input file does not contain a valid Trivy report.")
-            raise ValueError("Input file does not contain a valid Trivy report.")
     except FileNotFoundError:
         logger.error(f"The file '{input_file_json}' was not found.")
         raise
