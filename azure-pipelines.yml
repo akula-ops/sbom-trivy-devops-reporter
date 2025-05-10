@@ -87,7 +87,7 @@ stages:
             displayName: Vulnerability Scan using SBOM
           
           - script: |
-              python3 $(System.DefaultWorkingDirectory)/pipelines/scripts/convert_trivy_to_junit.py \
+              python3 $(System.DefaultWorkingDirectory)/scripts/convert_trivy_to_junit.py \
               $(Build.ArtifactStagingDirectory)/vulnerability-report.json \
               $(Build.ArtifactStagingDirectory)/vulnerability-report-tests.xml
             displayName: Convert Vulnerability Report to JUnit XML
