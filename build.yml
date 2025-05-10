@@ -1,0 +1,102 @@
+parameters:
+  ArtifactName: 'artifacts'
+
+stages:
+
+##### Initial stages/ Test stages #####
+
+##### Installation of Trivy #####
+  - stage: InstallTrivy
+    displayName: Install Trivy
+    jobs:
+      - job: InstallTrivyJob
+        displayName: Install Trivy
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - script: |
+              echo "Installing Trivy"
+              mkdir -p trivy-bin
+              curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh || { echo "Failed to install Trivy"; exit 1; }
+              mv ./bin/trivy trivy-bin/
+            displayName: Install Trivy
+
+          - task: PublishPipelineArtifact@1
+            inputs:
+              targetPath: 'trivy-bin'
+              artifact: 'trivy'
+              publishLocation: 'pipeline'
+
+##### SBOM generation stage #####
+  - stage: GenerateSBOM
+    displayName: Generate SBOM
+    dependsOn: InstallTrivy
+    jobs:
+      - job: GenerateSBOMJob
+        displayName: Generate SBOM with Trivy
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              artifact: 'trivy'
+              path: '$(Pipeline.Workspace)/trivy'
+  
+          - script: |
+              echo "Generating SBOM file"
+              chmod +x $(Pipeline.Workspace)/trivy/trivy
+              $(Pipeline.Workspace)/trivy/trivy fs --format cyclonedx --output $(Build.ArtifactStagingDirectory)/sbom.json .
+            displayName: Generate SBOM with Trivy
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              pathToPublish: $(Build.ArtifactStagingDirectory)/sbom.json
+              artifactName: SBOM
+              publishLocation: 'Container'
+
+##### Vulnerability scan stage #####
+  - stage: VulnerabilityScan
+    displayName: Vulnerability Scan
+    dependsOn: GenerateSBOM
+    jobs:
+      - job: VulnerabilityScanJob
+        displayName: Vulnerability Scan with Trivy
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - task: Checkout@1
+            inputs:
+              repository: templates
+              clean: true
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              artifact: 'trivy'
+              path: '$(Pipeline.Workspace)/trivy'
+          
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              artifact: 'SBOM'
+              path: '$(Build.ArtifactStagingDirectory)'
+
+          - script: |
+              echo "Vulnerability scan started"
+              chmod +x $(Pipeline.Workspace)/trivy/trivy
+              $(Pipeline.Workspace)/trivy/trivy sbom --severity HIGH,CRITICAL --exit-code 0 --format json --output $(Build.ArtifactStagingDirectory)/vulnerability-report.json $(Build.ArtifactStagingDirectory)/sbom.json
+              echo "=== Vulnerability Report ==="
+              cat $(Build.ArtifactStagingDirectory)/vulnerability-report.json
+            displayName: Vulnerability Scan using SBOM
+          
+          - script: |
+              python3 $(System.DefaultWorkingDirectory)/pipelines/scripts/convert_trivy_to_junit.py \
+              $(Build.ArtifactStagingDirectory)/vulnerability-report.json \
+              $(Build.ArtifactStagingDirectory)/vulnerability-report-tests.xml
+            displayName: Convert Vulnerability Report to JUnit XML
+
+          - task: PublishTestResults@2
+            inputs:
+              testResultsFormat: 'JUnit'
+              testResultsFiles: '$(Build.ArtifactStagingDirectory)/vulnerability-report-tests.xml'
+              failTaskOnFailedTests: true
+            displayName: Publish Vulnerability Report as Test Results
+
+##### Publish stage #####
