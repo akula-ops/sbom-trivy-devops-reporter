@@ -2,7 +2,7 @@ import os
 import json
 import pytest
 from xml.etree.ElementTree import parse
-from pipelines.scripts.convert_trivy_to_junit import convert_trivy_to_junit
+from convert_trivy_to_junit import convert_trivy_to_junit
 
 @pytest.fixture
 def temp_files():
