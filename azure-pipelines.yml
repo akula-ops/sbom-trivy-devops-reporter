@@ -64,10 +64,6 @@ stages:
         pool:
           vmImage: 'ubuntu-latest'
         steps:
-          - task: Checkout@1
-            inputs:
-              repository: templates
-              clean: true
           - task: DownloadPipelineArtifact@2
             inputs:
               artifact: 'trivy'
