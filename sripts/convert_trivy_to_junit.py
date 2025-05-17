@@ -4,10 +4,15 @@ import os
 import xml.etree.ElementTree as ET
 import logging
 import argparse
+from tabulate import tabulate
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
+
+def truncate_text(text: str, length: int=50) -> str:
+    """Truncate text to a fixed length with ellipsis if needed."""
+    return text if len(text) <= length else text[:length - 3] + "..."
 
 def convert_trivy_to_junit(input_file_json: str, output_file_xml: str) -> None:
     """
@@ -73,11 +78,23 @@ def convert_trivy_to_junit(input_file_json: str, output_file_xml: str) -> None:
     tree = ET.ElementTree(testsuites)
     tree.write(output_file_xml)
     logger.info(f"{len(vulnerabilities)} vulnerabilities found. JUnit XML report successfully written to '{output_file_xml}'.")
+    # Print vulnerabilities summary table
+    table_data = []
+    for vuln in vulnerabilities:
+        table_data.append([
+            vuln.get('Severity', 'Unknown'),
+            vuln.get('PkgName', 'Unknown'),
+            vuln.get('VulnerabilityID', 'Unknown'),
+            truncate_text(vuln.get('Title', 'No description available'), length=50),
+            vuln.get('FixedVersion', 'N/A')
+        ])
 
-def main():
-    """
-    Command-line interface for the Trivy to JUnit XML converter.
-    """
+    headers = ["Severity", "Package", "CVE", "Description", "Fixed Version"]
+    print("\nVulnerabilities Summary:")
+    print(tabulate(table_data, headers=headers, tablefmt="grid"))
+
+def main() -> None:
+    """Command-line interface for the Trivy to JUnit XML converter."""
     # Set up argument parser
     parser = argparse.ArgumentParser(description="Convert Trivy JSON reports to JUnit XML format.")
     parser.add_argument("input_file", type=str, help="Path to the Trivy JSON report.")
