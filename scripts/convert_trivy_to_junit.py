@@ -15,38 +15,38 @@ def truncate_text(input_text: str, length: int=50) -> str:
     
     Args: 
         text (str): string to be truncated
-        lenhgt (int): lenght of the text
+        length (int): length of the text
 
     Returns: 
-        text (str): truncated text with added ellipsis if thext was too long    
+        text (str): truncated text with added ellipsis if the text was too long    
     """
     return input_text if len(input_text) <= length else input_text[:length - 3] + "..."
 
-def convert_trivy_to_junit(vulnerability_json_report: str, vulnerability_xml_report: str) -> None:
+def convert_trivy_to_junit(vuln_input_json: str, vulnerability_xml_report: str) -> None:
     """
     Converts a Trivy vulnerability report from JSON format to JUnit XML format.
-    Ouput also CLI table with vulnerabilities summary.
+    Output also CLI table with vulnerabilities summary.
 
     Args:
-        vulnerability_json_report (str): Path to the Trivy JSON report.
+        vuln_input_json (str): Path to the Trivy JSON report.
         vulnerability_xml_report (str): Path to save the JUnit XML report.
     Raises:
         FileNotFoundError: If the input JSON file does not exist.
         json.JSONDecodeError: If the JSON file cannot be parsed.
     """
-    if not os.path.exists(vulnerability_json_report):
-        logger.error(f"Input file '{vulnerability_json_report}' does not exist.")
-        raise FileNotFoundError(f"Input file '{vulnerability_json_report}' does not exist.")
+    if not os.path.exists(vuln_input_json):
+        logger.error(f"Input file '{vuln_input_json}' does not exist.")
+        raise FileNotFoundError(f"Input file '{vuln_input_json}' does not exist.")
 
     try:
         # Load the Trivy JSON report
-        with open(vulnerability_json_report, 'r') as json_vuln_file:
+        with open(vuln_input_json, 'r') as json_vuln_file:
             report = json.load(json_vuln_file)
     except FileNotFoundError:
-        logger.error(f"The file '{vulnerability_json_report}' was not found.")
+        logger.error(f"The file '{vuln_input_json}' was not found.")
         raise
     except json.JSONDecodeError:
-        logger.error(f"Failed to parse JSON from '{vulnerability_json_report}'.")
+        logger.error(f"Failed to parse JSON from '{vuln_input_json}'.")
         raise
 
     # Extract vulnerabilities from the report if not extracted then return logger info
@@ -68,10 +68,9 @@ def convert_trivy_to_junit(vulnerability_json_report: str, vulnerability_xml_rep
         failures=str(len(vulnerabilities))
     )
 
-    # Add each vulnerability as a test case
-    # More data can be added to the failure message if needed,
-    # based on the requirements and available data,
-    # but for now we will keep it simple.
+    # Print vulnerabilities summary table for CLI
+    # Different information can be added to the table if needed,
+    # based on the requirements and available data.
     for vuln in vulnerabilities:
         testcase = ET.SubElement(
             testsuite,
@@ -83,7 +82,7 @@ def convert_trivy_to_junit(vulnerability_json_report: str, vulnerability_xml_rep
         failure = ET.SubElement(
             testcase,
             "failure",
-            # Description that will be shown in the Tests tab in Azure DevOps for eaxh test when opened
+            # Description that will be shown in the Tests tab in Azure DevOps for each test when opened
             message=(
                 f"Vulnerability found: {vuln['Severity']} severity in {vuln['PkgName']}@{vuln['InstalledVersion']} "
                 f"({vuln['VulnerabilityID']}). Fixed in version: {vuln.get('FixedVersion', 'N/A')}. "
@@ -97,9 +96,8 @@ def convert_trivy_to_junit(vulnerability_json_report: str, vulnerability_xml_rep
     logger.info(f"{len(vulnerabilities)} vulnerabilities found. JUnit XML report successfully written to '{vulnerability_xml_report}'.")
     
     # Print vulnerabilities summary table for CLI
-    # More data can be added to the table if needed,
-    # based on the requirements and available data,
-    # but for now we will keep it simple.
+    # Different information can be added to the table if needed,
+    # based on the requirements and available data.
     table_data = []
     for vuln in vulnerabilities:
         table_data.append([
@@ -118,11 +116,11 @@ def main() -> None:
     """Command-line interface for the Trivy to JUnit XML converter."""
     # Set up argument parser
     parser = argparse.ArgumentParser(description="Convert Trivy JSON reports to JUnit XML format.")
-    parser.add_argument("vulnerability_json_report", type=str, help="Path to the Trivy JSON report.")
+    parser.add_argument("vuln_input_json", type=str, help="Path to the Trivy JSON report.")
     parser.add_argument("vulnerability_xml_report", type=str, help="Path to save the JUnit XML report.")
     args = parser.parse_args()
 
-    # Validate file extensions befor running the conversion
+    # Validate file extensions before running the conversion
     if not args.input_file.endswith('.json'):
         logger.error("Input file must have a .json extension.")
         exit(1)
