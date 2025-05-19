@@ -57,4 +57,4 @@ Templates for automating SBOM generation and vulnerability scanning using Trivy 
 - The script processes vulnerabilities with `HIGH` and `CRITICAL` severities, but can be adjusted to include `MEDIUM` and `LOW` vulnerabilities.
 - Ensure the input file is a valid JSON file and the output file has a `.xml` extension.
 - Logs will provide feedback during execution, including errors for missing files or invalid JSON.
-- For the best implementation consider creating template for the pipeline and use it in diffenet projects.
+- For the best implementation consider creating template for the pipeline and use it in different projects.
