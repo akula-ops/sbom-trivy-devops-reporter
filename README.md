@@ -41,6 +41,7 @@ Templates for automating SBOM generation and vulnerability scanning using Trivy 
      python3 -m pip install --upgrade pip
      python3 -m pip install -r $(System.DefaultWorkingDirectory)/scripts/requirements.txt
      ```
+   **Note**: requirements needs to be installed for the output report in CLI to be generated. If you are not using the CLI, you can remove installation and remove generation of the CLI report form the script file.
 
    - Use the provided Python script to convert the vulnerability report into JUnit XML format:
      ```bash
@@ -56,3 +57,4 @@ Templates for automating SBOM generation and vulnerability scanning using Trivy 
 - The script processes vulnerabilities with `HIGH` and `CRITICAL` severities, but can be adjusted to include `MEDIUM` and `LOW` vulnerabilities.
 - Ensure the input file is a valid JSON file and the output file has a `.xml` extension.
 - Logs will provide feedback during execution, including errors for missing files or invalid JSON.
+- For the best implementation consider creating template for the pipeline and use it in diffenet projects.
