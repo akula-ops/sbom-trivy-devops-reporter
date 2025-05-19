@@ -1,0 +1,150 @@
+{
+  "SchemaVersion": 2,
+  "CreatedAt": "2025-05-18T15:59:37.9406526+03:00",
+  "ArtifactName": "sbom-Application.Api.json",
+  "ArtifactType": "cyclonedx",
+  "Metadata": {
+    "ImageConfig": {
+      "architecture": "",
+      "created": "0001-01-01T00:00:00Z",
+      "os": "",
+      "rootfs": {
+        "type": "",
+        "diff_ids": null
+      },
+      "config": {}
+    }
+  },
+  "Results": [
+    {
+      "Target": "bin/path/Application.Api.deps.json",
+      "Class": "lang-pkgs",
+      "Type": "dotnet-core",
+      "Vulnerabilities": [
+        {
+          "VulnerabilityID": "CVE-2022-xfwetg",
+          "PkgID": "dependency/x.x.x",
+          "PkgName": "dependency",
+          "PkgIdentifier": {
+            "PURL": "pkg:nuget/dependency@x.x.x",
+            "UID": "2393b1ec876c45c2",
+            "BOMRef": "pkg:nuget/dependency@x.x.x"
+          },
+          "InstalledVersion": "x.x.x",
+          "FixedVersion": "12.13.0",
+          "Status": "fixed",
+          "Layer": {},
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/CVE-2022-xfwetg",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory NuGet",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Anuget"
+          },
+          "Title": "Azure Storage: Azure Storage Library Information Disclosure Vulnerability",
+          "Description": "Azure Storage Library Information Disclosure Vulnerability",
+          "Severity": "MEDIUM",
+          "CweIDs": [
+            "CWE-x3x7"
+          ],
+          "VendorSeverity": {
+            "ghsa": 2,
+            "nvd": 1,
+            "redhat": 2,
+            "ubuntu": 2
+          },
+          "CVSS": {
+            "ghsa": {
+              "V3Vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:N/A:N",
+              "V3Score": 4.7
+            },
+            "nvd": {
+              "V2Vector": "AV:L/AC:M/Au:N/C:P/I:N/A:N",
+              "V2Score": 1.9
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2022-xfwetg",
+            "https://github.com/Azure/azure-sdk-for-python/commit/fce66e688df380805829ac3a9db47d8627de3ae8",
+            "https://github.com/google/security-research/security/advisories/GHSA-6m8q-r22q-vfxh",
+            "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2022-xfwetg",
+            "https://nvd.nist.gov/vuln/detail/CVE-2022-xfwetg",
+            "https://portal.msrc.microsoft.com/en-US/security-guidance/advisory/CVE-2022-xfwetg",
+            "https://www.cve.org/CVERecord?id=CVE-2022-xfwetg"
+          ],
+          "PublishedDate": "2022-07-12T23:15:10.96Z",
+          "LastModifiedDate": "2024-11-21T07:02:19.837Z"
+        },
+        {
+          "VulnerabilityID": "CVE-20s-stssg",
+          "PkgID": "Microsoft.package.desc.test/x.x.x",
+          "PkgName": "Microsoft.package.desc.test",
+          "PkgIdentifier": {
+            "PURL": "pkg:nuget/Microsoft.package.desc.test@x.x.x",
+            "UID": "9aab03ea07d432f5",
+            "BOMRef": "pkg:nuget/Microsoft.package.desc.test@x.x.x"
+          },
+          "InstalledVersion": "x.x.x",
+          "FixedVersion": "2.1.29, 3.1.18, 5.0.9",
+          "Status": "fixed",
+          "Layer": {},
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/CVE-20s-stssg",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory NuGet",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Anuget"
+          },
+          "Title": "dotnet: ASP.NET Core JWT token logging",
+          "Description": "ASP.NET Core and Visual Studio Information Disclosure Vulnerability",
+          "Severity": "MEDIUM",
+          "VendorSeverity": {
+            "bitnami": 2,
+            "ghsa": 2,
+            "nvd": 2,
+            "oracle-oval": 3,
+            "redhat": 1,
+            "rocky": 3
+          },
+          "CVSS": {
+            "bitnami": {
+              "V3Vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+              "V3Score": 5.5
+            },
+            "ghsa": {
+              "V3Vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+              "V3Score": 5.5
+            },
+            "nvd": {
+              "V2Vector": "AV:L/AC:L/Au:N/C:P/I:N/A:N",
+              "V3Vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+              "V2Score": 2.1,
+              "V3Score": 5.5
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+              "V3Score": 5.5
+            }
+          },
+          "References": [
+            "https://access.redhat.com/hydra/rest/securitydata/cve/CVE-2021-26423.json",
+            "https://access.redhat.com/hydra/rest/securitydata/cve/CVE-2021-34485.json",
+            "https://access.redhat.com/hydra/rest/securitydata/cve/CVE-20s-stssg.json",
+            "https://access.redhat.com/security/cve/CVE-20s-stssg",
+            "https://github.com/dotnet/announcements/issues/195",
+            "https://github.com/dotnet/aspnetcore",
+            "https://github.com/dotnet/aspnetcore/security/advisories/CVE-2w0s-stssddg",
+            "https://linux.oracle.com/cve/CVE-20s-stssg.html",
+            "https://linux.oracle.com/errata/ELSA-2021-3148.html",
+            "https://msrc.microsoft.com/update-guide/vulnerability/CVE-20s-stssg",
+            "https://nvd.nist.gov/vuln/detail/CVE-20s-stssg",
+            "https://portal.msrc.microsoft.com/en-US/security-guidance/advisory/CVE-20s-stssg",
+            "https://www.cve.org/CVERecord?id=CVE-20s-stssg"
+          ],
+          "PublishedDate": "2021-08-12T18:15:09.337Z",
+          "LastModifiedDate": "2024-11-21T06:10:36.967Z"
+        }
+      ]
+    }
+  ]
+}
