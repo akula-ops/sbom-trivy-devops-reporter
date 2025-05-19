@@ -1,3 +1,5 @@
+"""Basic unit tests for the convert_trivy_to_junit script."""
+
 import os
 import json
 import pytest
@@ -5,19 +7,19 @@ from xml.etree.ElementTree import parse
 from scripts.convert_trivy_to_junit import convert_trivy_to_junit
 
 @pytest.fixture
-def temp_files():
-    """Fixture to create temporary input and output files for testing."""
-    input_file = "temp_input.json"
-    output_file = "temp_output.xml"
-    yield input_file, output_file
-    if os.path.exists(input_file):
-        os.remove(input_file)
-    if os.path.exists(output_file):
-        os.remove(output_file)
+def files_fixture():
+    """Fixture to create temporary input and output files for testing puposes."""
+    vulnerability_input = "vulnerability_input_temp.json"
+    vulnerability_output = "vulnerability_output_temp.xml"
+    yield vulnerability_input, vulnerability_output
+    if os.path.exists(vulnerability_input):
+        os.remove(vulnerability_input)
+    if os.path.exists(vulnerability_output):
+        os.remove(vulnerability_output)
 
-def test_conversion_with_valid_data(temp_files):
+def test_conversion_with_valid_data(files_fixture):
     """Ensure the function correctly converts a valid Trivy JSON report."""
-    input_file, output_file = temp_files
+    vulnerability_input, vulnerability_output = files_fixture
 
     # Sample Trivy JSON report with one vulnerability
     sample_report = {
@@ -37,48 +39,44 @@ def test_conversion_with_valid_data(temp_files):
             }
         ]
     }
-    with open(input_file, "w") as f:
-        json.dump(sample_report, f)
+    with open(vulnerability_input, "w") as file:
+        json.dump(sample_report, file)
 
-    # Run the conversion
-    convert_trivy_to_junit(input_file, output_file)
+    convert_trivy_to_junit(vulnerability_input, vulnerability_output)
 
-    # Check if the output file exists and validate its content
-    assert os.path.exists(output_file)
-    tree = parse(output_file)
+    assert os.path.exists(vulnerability_output)
+    tree = parse(vulnerability_output)
     root = tree.getroot()
     assert root.tag == "testsuites"
+    # Has one testsuite element meaning that the conversion was successful
     assert len(root.findall(".//testcase")) == 1
 
-def test_conversion_with_empty_results(temp_files):
+def test_conversion_with_empty_results(files_fixture):
     """Check behavior when the input JSON has no vulnerabilities."""
-    input_file, output_file = temp_files
+    vulnerability_input, vulnerability_output = files_fixture
 
     empty_report = {"Results": []}
-    with open(input_file, "w") as f:
+    with open(vulnerability_input, "w") as f:
         json.dump(empty_report, f)
 
-    # Run the conversion
-    convert_trivy_to_junit(input_file, output_file)
+    convert_trivy_to_junit(vulnerability_input, vulnerability_output)
 
-    # Ensure no output file is created
-    assert not os.path.exists(output_file)
+    assert not os.path.exists(vulnerability_output)
 
-def test_missing_input_file(temp_files):
+def test_missing_vulnerability_input(files_fixture):
     """Verify the function raises an error when the input file is missing."""
-    _, output_file = temp_files
+    _, vulnerability_output = files_fixture
 
     with pytest.raises(FileNotFoundError):
-        convert_trivy_to_junit("nonexistent_file.json", output_file)
+        convert_trivy_to_junit("nonexistent_input_file.json", vulnerability_output)
 
-def test_invalid_json_format(temp_files):
+def test_invalid_json_format(files_fixture):
     """Test the function with an invalid JSON file."""
-    input_file, output_file = temp_files
+    vulnerability_input, vulnerability_output = files_fixture
 
-    # Write invalid JSON to the input file
-    with open(input_file, "w") as f:
+    with open(vulnerability_input, "w") as f:
         f.write("{invalid_json}")
 
     with pytest.raises(json.JSONDecodeError):
-        convert_trivy_to_junit(input_file, output_file)
+        convert_trivy_to_junit(vulnerability_input, vulnerability_output)
 
