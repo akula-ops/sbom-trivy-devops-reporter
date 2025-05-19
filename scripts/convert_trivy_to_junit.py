@@ -22,30 +22,31 @@ def truncate_text(input_text: str, length: int=50) -> str:
     """
     return input_text if len(input_text) <= length else input_text[:length - 3] + "..."
 
-def convert_trivy_to_junit(input_file_json: str, output_file_xml: str) -> None:
+def convert_trivy_to_junit(vulnerability_json_report: str, vulnerability_xml_report: str) -> None:
     """
     Converts a Trivy vulnerability report from JSON format to JUnit XML format.
+    Ouput also CLI table with vulnerabilities summary.
 
     Args:
-        input_file_json (str): Path to the Trivy JSON report.
-        output_file_xml (str): Path to save the JUnit XML report.
+        vulnerability_json_report (str): Path to the Trivy JSON report.
+        vulnerability_xml_report (str): Path to save the JUnit XML report.
     """
-    if not os.path.exists(input_file_json):
-        logger.error(f"Input file '{input_file_json}' does not exist.")
-        raise FileNotFoundError(f"Input file '{input_file_json}' does not exist.")
+    if not os.path.exists(vulnerability_json_report):
+        logger.error(f"Input file '{vulnerability_json_report}' does not exist.")
+        raise FileNotFoundError(f"Input file '{vulnerability_json_report}' does not exist.")
 
     try:
         # Load the Trivy JSON report
-        with open(input_file_json, 'r') as json_vuln_file:
+        with open(vulnerability_json_report, 'r') as json_vuln_file:
             report = json.load(json_vuln_file)
     except FileNotFoundError:
-        logger.error(f"The file '{input_file_json}' was not found.")
+        logger.error(f"The file '{vulnerability_json_report}' was not found.")
         raise
     except json.JSONDecodeError:
-        logger.error(f"Failed to parse JSON from '{input_file_json}'.")
+        logger.error(f"Failed to parse JSON from '{vulnerability_json_report}'.")
         raise
 
-    # Extract vulnerabilities from the report
+    # Extract vulnerabilities from the report if not extracted then return logger info
     vulnerabilities = []
     for result in report.get("Results", []):
         for vuln in result.get("Vulnerabilities", []):
@@ -65,16 +66,21 @@ def convert_trivy_to_junit(input_file_json: str, output_file_xml: str) -> None:
     )
 
     # Add each vulnerability as a test case
+    # More data can be added to the failure message if needed,
+    # based on the requirements and available data,
+    # but for now we will keep it simple.
     for vuln in vulnerabilities:
         testcase = ET.SubElement(
             testsuite,
             "testcase",
             classname="Trivy",
+            # Test name that will be shown in the Tests tab in Azure DevOps
             name=f"{vuln.get('Severity', 'Unknown')} - {vuln.get('PkgName', 'Unknown')}@{vuln.get('InstalledVersion', 'Unknown')} - ({vuln['VulnerabilityID']})"
         )
         failure = ET.SubElement(
             testcase,
             "failure",
+            # Description that will be shown in the Tests tab in Azure DevOps for eaxh test when opened
             message=(
                 f"Vulnerability found: {vuln['Severity']} severity in {vuln['PkgName']}@{vuln['InstalledVersion']} "
                 f"({vuln['VulnerabilityID']}). Fixed in version: {vuln.get('FixedVersion', 'N/A')}. "
@@ -84,9 +90,13 @@ def convert_trivy_to_junit(input_file_json: str, output_file_xml: str) -> None:
         failure.text = f"{vuln.get('Severity', 'Unknown')}: {vuln.get('Title', 'No Title')} ({vuln.get('VulnerabilityID', 'Unknown')})"
 
     tree = ET.ElementTree(testsuites)
-    tree.write(output_file_xml)
-    logger.info(f"{len(vulnerabilities)} vulnerabilities found. JUnit XML report successfully written to '{output_file_xml}'.")
-    # Print vulnerabilities summary table
+    tree.write(vulnerability_xml_report)
+    logger.info(f"{len(vulnerabilities)} vulnerabilities found. JUnit XML report successfully written to '{vulnerability_xml_report}'.")
+    
+    # Print vulnerabilities summary table for CLI
+    # More data can be added to the table if needed,
+    # based on the requirements and available data,
+    # but for now we will keep it simple.
     table_data = []
     for vuln in vulnerabilities:
         table_data.append([
