@@ -30,6 +30,9 @@ def convert_trivy_to_junit(vulnerability_json_report: str, vulnerability_xml_rep
     Args:
         vulnerability_json_report (str): Path to the Trivy JSON report.
         vulnerability_xml_report (str): Path to save the JUnit XML report.
+    Raises:
+        FileNotFoundError: If the input JSON file does not exist.
+        json.JSONDecodeError: If the JSON file cannot be parsed.
     """
     if not os.path.exists(vulnerability_json_report):
         logger.error(f"Input file '{vulnerability_json_report}' does not exist.")
@@ -115,11 +118,11 @@ def main() -> None:
     """Command-line interface for the Trivy to JUnit XML converter."""
     # Set up argument parser
     parser = argparse.ArgumentParser(description="Convert Trivy JSON reports to JUnit XML format.")
-    parser.add_argument("input_file", type=str, help="Path to the Trivy JSON report.")
-    parser.add_argument("output_file", type=str, help="Path to save the JUnit XML report.")
+    parser.add_argument("vulnerability_json_report", type=str, help="Path to the Trivy JSON report.")
+    parser.add_argument("vulnerability_xml_report", type=str, help="Path to save the JUnit XML report.")
     args = parser.parse_args()
 
-    # Validate file extensions
+    # Validate file extensions befor running the conversion
     if not args.input_file.endswith('.json'):
         logger.error("Input file must have a .json extension.")
         exit(1)
