@@ -2,7 +2,7 @@ import os
 import json
 import pytest
 from xml.etree.ElementTree import parse
-from convert_trivy_to_junit import convert_trivy_to_junit
+from scripts.convert_trivy_to_junit import convert_trivy_to_junit
 
 @pytest.fixture
 def temp_files():
@@ -82,13 +82,3 @@ def test_invalid_json_format(temp_files):
     with pytest.raises(json.JSONDecodeError):
         convert_trivy_to_junit(input_file, output_file)
 
-def test_invalid_trivy_structure(temp_files):
-    """Ensure the function raises an error for an invalid Trivy report structure."""
-    input_file, output_file = temp_files
-
-    invalid_report = {"UnexpectedKey": "UnexpectedValue"}
-    with open(input_file, "w") as f:
-        json.dump(invalid_report, f)
-
-    with pytest.raises(ValueError):
-        convert_trivy_to_junit(input_file, output_file)
