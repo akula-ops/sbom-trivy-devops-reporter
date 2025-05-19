@@ -1,0 +1,168 @@
+{
+  "$schema": "http://cyclonedx.org/schema/bom-1.6.schema.json",
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "serialNumber": "urn:uuid:ff3e9b09-2d33-4feb-bc97-2c199f600d64",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2025-05-18T12:55:44+00:00",
+    "tools": {
+      "components": [
+        {
+          "type": "application",
+          "group": "aquasecurity",
+          "name": "trivy",
+          "version": "0.62.0"
+        }
+      ]
+    },
+    "component": {
+      "bom-ref": "0c81d2f7-b10a-4cee-b183-717dbd13c21c",
+      "type": "application",
+      "name": "src/application.Api",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:SchemaVersion",
+          "value": "2"
+        }
+      ]
+    }
+  },
+  "components": [
+    {
+      "bom-ref": "fa77b51a-b813-4085-9ae8-fcb941428968",
+      "type": "application",
+      "name": "bin/path/ApplicationApi.Api.deps.json",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:Class",
+          "value": "lang-pkgs"
+        },
+        {
+          "name": "aquasecurity:trivy:Type",
+          "value": "dotnet-core"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:nuget/package.name6@x.x.x",
+      "type": "library",
+      "name": "package.name6",
+      "version": "x.x.x",
+      "purl": "pkg:nuget/package.name6@x.x.x",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "package.name6/x.x.x"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "dotnet-core"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:nuget/Apackage.name5@x.x.x",
+      "type": "library",
+      "name": "Apackage.name5",
+      "version": "x.x.x",
+      "purl": "pkg:nuget/Apackage.name5@x.x.x",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "Apackage.name5/x.x.x"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "dotnet-core"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:nuget/package.name4@x.x.x",
+      "type": "library",
+      "name": "package.name4",
+      "version": "x.x.x",
+      "purl": "pkg:nuget/package.name4@x.x.x",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "package.name4/x.x.x"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "dotnet-core"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:nuget/package.name3@x.x.x",
+      "type": "library",
+      "name": "package.name3",
+      "version": "x.x.x",
+      "purl": "pkg:nuget/package.name3@x.x.x",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "package.name3/x.x.x"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "dotnet-core"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:nuget/package.name2@x.x.x",
+      "type": "library",
+      "name": "package.name2",
+      "version": "x.x.x",
+      "purl": "pkg:nuget/package.name2@x.x.x",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "package.name2/x.x.x"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "dotnet-core"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:nuget/package.name@x.x.x",
+      "type": "library",
+      "name": "package.name",
+      "version": "x.x.x",
+      "purl": "pkg:nuget/package.name@x.x.x",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "package.name/x.x.x"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "dotnet-core"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:nuget/package.name7@x.x.x",
+      "type": "library",
+      "name": "package.name7",
+      "version": "x.x.x",
+      "purl": "pkg:nuget/package.name7@x.x.x",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "package.name7/x.x.x"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "dotnet-core"
+        }
+      ]
+    }
+  ],
+  "vulnerabilities": []
+}
