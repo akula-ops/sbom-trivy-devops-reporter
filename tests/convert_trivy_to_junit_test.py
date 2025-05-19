@@ -8,7 +8,7 @@ from scripts.convert_trivy_to_junit import convert_trivy_to_junit
 
 @pytest.fixture
 def files_fixture():
-    """Fixture to create temporary input and output files for testing puposes."""
+    """Fixture to create temporary input and output files for testing purposes."""
     vulnerability_input = "vulnerability_input_temp.json"
     vulnerability_output = "vulnerability_output_temp.xml"
     yield vulnerability_input, vulnerability_output
