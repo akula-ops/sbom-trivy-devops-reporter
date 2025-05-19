@@ -10,9 +10,17 @@ from tabulate import tabulate
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
-def truncate_text(text: str, length: int=50) -> str:
-    """Truncate text to a fixed length with ellipsis if needed."""
-    return text if len(text) <= length else text[:length - 3] + "..."
+def truncate_text(input_text: str, length: int=50) -> str:
+    """Truncate text to a fixed length with ellipsis if needed.
+    
+    Args: 
+        text (str): string to be truncated
+        lenhgt (int): lenght of the text
+
+    Returns: 
+        text (str): truncated text with added ellipsis if thext was too long    
+    """
+    return input_text if len(input_text) <= length else input_text[:length - 3] + "..."
 
 def convert_trivy_to_junit(input_file_json: str, output_file_xml: str) -> None:
     """
