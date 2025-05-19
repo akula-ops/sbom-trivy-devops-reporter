@@ -1,0 +1,16 @@
+<testsuites>
+	<testsuite name="Vulnerability Scan" tests="2" failures="2">
+		<testcase classname="Trivy" name="MEDIUM - <Application name>@x.x.x-x (CVE-1111)">
+			<failure message="Vulnerability found: MEDIUM severity in <Dependency name>@x.x.x-x (CVE-1111). Fixed in version: x.x.x. Status: fixed.">
+				MEDIUM: Library X Information Disclosure Vulnerability (CVE-1111)
+			</failure>
+		</testcase>
+
+		<testcase classname="Trivy" name="MEDIUM - <Dependency name>@x.x.x-x - (CVE-1111s)">
+			<failure message="Vulnerability found: MEDIUM severity in <Dependency name>@x.x.x-x (CVE-1111s). Fixed in version: x.x.x. Status: fixed.">
+				MEDIUM: Server side request forgery in Library X (CVE-1111s)
+			</failure>
+		</testcase>
+
+	</testsuite>
+</testsuites>
