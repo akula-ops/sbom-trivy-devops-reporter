@@ -121,16 +121,16 @@ def main() -> None:
     args = parser.parse_args()
 
     # Validate file extensions before running the conversion
-    if not args.input_file.endswith('.json'):
+    if not args.vuln_input_json.endswith('.json'):
         logger.error("Input file must have a .json extension.")
         exit(1)
-    if not args.output_file.endswith('.xml'):
+    if not args.vulnerability_xml_report.endswith('.xml'):
         logger.error("Output file must have a .xml extension.")
         exit(1)
 
     # Run the conversion
     try:
-        convert_trivy_to_junit(args.input_file, args.output_file)
+        convert_trivy_to_junit(args.vuln_input_json, args.vulnerability_xml_report)
     except Exception as e:
         logger.error(f"An error occurred: {e}")
         exit(1)
